@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        DOCKER_IMAGE = 'manueltrajcev/jenkins-nginx-demo'
+        DOCKER_IMAGE = 'manueltrajcev/kiii'
         DOCKER_TAG = "${BUILD_NUMBER}"
     }
 

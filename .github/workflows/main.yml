@@ -1,3 +1,4 @@
+---
 name: CI Workflow
 
 on:
@@ -16,6 +17,8 @@ jobs:
         uses: github/super-linter@v4
         env:
           RUN_LOCAL: true
+          # Added to ensure the linter has the context it needs
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   docker:
     needs: [super-lint]
@@ -37,13 +40,13 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t $DOCKERHUB_USERNAME/my-image:${{ github.sha }} .
+          docker build -t "$DOCKERHUB_USERNAME/my-image:${{ github.sha }}" .
       
       - name: Log in to Docker Hub
         run: |
-          echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
+          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push $DOCKERHUB_USERNAME/my-image:${{ github.sha }}
-          docker push $DOCKERHUB_USERNAME/my-image:latest
+          docker push "$DOCKERHUB_USERNAME/my-image:${{ github.sha }}"
+          docker push "$DOCKERHUB_USERNAME/my-image:latest"

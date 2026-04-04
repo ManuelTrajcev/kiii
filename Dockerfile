@@ -1,4 +1,4 @@
-FROM nginx
+FROM nginx:1.25-alpine
 
 # Copy the local index.html file to the appropriate directory in the Nginx container
 COPY index.html /usr/share/nginx/html/index.html

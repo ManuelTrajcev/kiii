@@ -37,12 +37,13 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t $DOCKERHUB_USERNAME/my-image .
-
+          docker build -t $DOCKERHUB_USERNAME/my-image:${{ github.sha }} .
+      
       - name: Log in to Docker Hub
         run: |
           echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USERNAME --password-stdin
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push $DOCKERHUB_USERNAME/my-image
+          docker push $DOCKERHUB_USERNAME/my-image:${{ github.sha }}
+          docker push $DOCKERHUB_USERNAME/my-image:latest

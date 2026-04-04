@@ -17,12 +17,15 @@ jobs:
         uses: github/super-linter@v4
         env:
           RUN_LOCAL: true
-          # Added to ensure the linter has the context it needs
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   docker:
     needs: [super-lint]
     runs-on: ubuntu-latest
+    # CRITICAL: This maps your GitHub Secrets so the shell can use them
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -38,16 +41,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Build Docker image
+      - name: Build and Push to Docker Hub
         run: |
-          docker build -t "$DOCKERHUB_USERNAME/my-image:${{ github.sha }}" .
-      
-      - name: Log in to Docker Hub
-        run: |
+          # Login using the mapped environment variables
           echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-
-      - name: Push Docker image to Docker Hub
-        run: |
-          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          
           docker build -t "$DOCKERHUB_USERNAME/kiii:latest" -t "$DOCKERHUB_USERNAME/kiii:${{ github.sha }}" .
+          
           docker push "$DOCKERHUB_USERNAME/kiii" --all-tags

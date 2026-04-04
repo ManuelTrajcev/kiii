@@ -1,0 +1,13 @@
+{
+  "name": "kiii",
+  "version": "1.0.0",
+  "description": "A Node.js project for Jenkins integration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {}
+}

@@ -12,13 +12,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
 
       - name: Run Super Linter
-        uses: github/super-linter@v5
+        uses: github/super-linter@v4
         env:
           RUN_LOCAL: true
+          # Added to ensure the linter has the context it needs
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   docker:
@@ -27,14 +26,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v1
 
       - name: Cache Docker layers
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}

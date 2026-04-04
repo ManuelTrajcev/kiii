@@ -48,5 +48,6 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push "$DOCKERHUB_USERNAME/my-image:${{ github.sha }}"
-          docker push "$DOCKERHUB_USERNAME/my-image:latest"
+          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          docker build -t "$DOCKERHUB_USERNAME/kiii:latest" -t "$DOCKERHUB_USERNAME/kiii:${{ github.sha }}" .
+          docker push "$DOCKERHUB_USERNAME/kiii" --all-tags
